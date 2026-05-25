@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "417632057422",
+    "project_id": "dogclubdata-base",
+    "storage_bucket": "dogclubdata-base.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:417632057422:android:c74a12ff033f9ee087eb1f",
+        "android_client_info": {
+          "package_name": "com.example.proyectofinal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxLHAG2CObJfU1UEvhPzBT2d1dBCmnRl0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,13 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Permisos globales de lectura y escritura para desarrollo.
+    // Esto asegura que el proyecto tenga permisos completos para realizar todo tipo de
+    // acción en cualquier colección (users, pets, bookings, reviews, chats, messages, etc.),
+    // previniendo errores de 'permission-denied' tanto en local como en producción durante pruebas.
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
