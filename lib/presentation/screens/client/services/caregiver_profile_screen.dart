@@ -57,16 +57,76 @@ class CaregiverProfileScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Hero image / avatar grande
-                    Container(
-                      height: 220,
-                      width: double.infinity,
-                      color: AppColors.lightBlue,
-                      child: caregiver.fotoUrl.isNotEmpty
-                          ? Image.network(caregiver.fotoUrl, fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) => _buildAvatarPlaceholder(caregiver))
-                          : _buildAvatarPlaceholder(caregiver),
+                    // Cabecera premium con Banner e Imagen de perfil superpuesta
+                    Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        // Imagen de portada (backgroundImg)
+                        Container(
+                          height: 180,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: AppColors.lightBlue,
+                            image: caregiver.backgroundImg.isNotEmpty
+                                ? DecorationImage(
+                                    image: NetworkImage(caregiver.backgroundImg),
+                                    fit: BoxFit.cover,
+                                  )
+                                : null,
+                          ),
+                          child: caregiver.backgroundImg.isEmpty
+                              ? Container(
+                                  decoration: const BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [AppColors.primary, AppColors.secondary],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                    ),
+                                  ),
+                                  child: const Center(
+                                    child: Opacity(
+                                      opacity: 0.2,
+                                      child: Icon(Icons.pets, size: 90, color: Colors.white),
+                                    ),
+                                  ),
+                                )
+                              : null,
+                        ),
+                        // Foto de perfil superpuesta
+                        Positioned(
+                          bottom: -35,
+                          left: 16,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.white, width: 3),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.15),
+                                  blurRadius: 6,
+                                  offset: const Offset(0, 3),
+                                )
+                              ],
+                            ),
+                            child: CircleAvatar(
+                              radius: 40,
+                              backgroundImage: caregiver.fotoUrl.isNotEmpty
+                                  ? NetworkImage(caregiver.fotoUrl)
+                                  : null,
+                              backgroundColor: AppColors.lightBlue,
+                              child: caregiver.fotoUrl.isEmpty
+                                  ? Text(caregiver.nombre[0].toUpperCase(),
+                                      style: const TextStyle(
+                                          fontSize: 28,
+                                          color: AppColors.primary,
+                                          fontWeight: FontWeight.bold))
+                                  : null,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
+                    const SizedBox(height: 45), // Espacio para compensar el avatar superpuesto
                     // Sección "¿Quién cuida?"
                     Padding(
                       padding: const EdgeInsets.all(16),
@@ -74,22 +134,9 @@ class CaregiverProfileScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              CircleAvatar(
-                                radius: 40,
-                                backgroundImage: caregiver.fotoUrl.isNotEmpty
-                                    ? NetworkImage(caregiver.fotoUrl)
-                                    : null,
-                                backgroundColor: AppColors.lightBlue,
-                                child: caregiver.fotoUrl.isEmpty
-                                    ? Text(caregiver.nombre[0].toUpperCase(),
-                                        style: const TextStyle(
-                                            fontSize: 28,
-                                            color: AppColors.primary,
-                                            fontWeight: FontWeight.bold))
-                                    : null,
-                              ),
-                              const SizedBox(width: 16),
+                              const SizedBox(width: 90), // Desplazar el texto a la derecha del avatar
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,7 +148,8 @@ class CaregiverProfileScreen extends StatelessWidget {
                                     Text(
                                         'Miembro desde ${DateHelper.formatYear(caregiver.fechaRegistro)}',
                                         style: const TextStyle(
-                                            color: AppColors.textSecondary)),
+                                            color: AppColors.textSecondary,
+                                            fontSize: 13)),
                                     const SizedBox(height: 4),
                                     RatingStars(
                                         rating: avgRating, reviewCount: reviewCount),
@@ -193,13 +241,6 @@ class CaregiverProfileScreen extends StatelessWidget {
           );
         },
       ),
-    );
-  }
-
-  Widget _buildAvatarPlaceholder(UserModel caregiver) {
-    return Center(
-      child: Icon(Icons.person,
-          size: 80, color: AppColors.primary.withValues(alpha: 0.5)),
     );
   }
 

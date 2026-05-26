@@ -12,6 +12,7 @@ class UserModel {
   final String direccion;
   final UserRole rol;
   final String fotoUrl;
+  final String backgroundImg;
   final String bio;
   final DateTime fechaRegistro;
   final bool activo;
@@ -25,6 +26,7 @@ class UserModel {
     required this.direccion,
     required this.rol,
     required this.fotoUrl,
+    this.backgroundImg = '',
     required this.bio,
     required this.fechaRegistro,
     required this.activo,
@@ -44,6 +46,7 @@ class UserModel {
       direccion: map['direccion'] as String? ?? '',
       rol: UserRole.fromString(map['rol'] as String? ?? 'cliente'),
       fotoUrl: map['foto_url'] as String? ?? '',
+      backgroundImg: map['background_img'] as String? ?? '',
       bio: map['bio'] as String? ?? '',
       fechaRegistro: map['fecha_registro'] is Timestamp
           ? (map['fecha_registro'] as Timestamp).toDate()
@@ -64,6 +67,7 @@ class UserModel {
       'direccion': direccion,
       'rol': rol.toValue,
       'foto_url': fotoUrl,
+      'background_img': backgroundImg,
       'bio': bio,
       'fecha_registro': Timestamp.fromDate(fechaRegistro),
       'activo': activo,
@@ -80,6 +84,7 @@ class UserModel {
     String? direccion,
     UserRole? rol,
     String? fotoUrl,
+    String? backgroundImg,
     String? bio,
     DateTime? fechaRegistro,
     bool? activo,
@@ -93,6 +98,7 @@ class UserModel {
       direccion: direccion ?? this.direccion,
       rol: rol ?? this.rol,
       fotoUrl: fotoUrl ?? this.fotoUrl,
+      backgroundImg: backgroundImg ?? this.backgroundImg,
       bio: bio ?? this.bio,
       fechaRegistro: fechaRegistro ?? this.fechaRegistro,
       activo: activo ?? this.activo,

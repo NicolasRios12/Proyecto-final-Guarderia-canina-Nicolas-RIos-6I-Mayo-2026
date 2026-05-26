@@ -136,6 +136,7 @@ class AuthProvider extends ChangeNotifier {
           String telefono = '';
           String direccion = 'Juárez, Chihuahua';
           String fotoUrl = '';
+          String backgroundImg = '';
           String bio = '';
           
           if (email == 'admin@dogclub.com') {
@@ -150,6 +151,7 @@ class AuthProvider extends ChangeNotifier {
             apellido = 'Martinez';
             telefono = '+52 656 123 4567';
             fotoUrl = 'https://i.pravatar.cc/150?img=1';
+            backgroundImg = 'https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&q=80&w=600';
             bio = 'Amante de los perros con 5 años de experiencia. Sin mascotas propias. Casa con jardín.';
           } else if (email == 'diana.juarez@dogclub.com') {
             rol = 'cuidador';
@@ -157,6 +159,7 @@ class AuthProvider extends ChangeNotifier {
             apellido = 'Juarez';
             telefono = '+52 656 987 6543';
             fotoUrl = 'https://i.pravatar.cc/150?img=5';
+            backgroundImg = 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&q=80&w=600';
             bio = 'Cuidadora certificada, veterinaria en formación. Experiencia con todas las razas.';
           } else if (email == 'carlos.lopez@dogclub.com') {
             rol = 'cuidador';
@@ -164,6 +167,7 @@ class AuthProvider extends ChangeNotifier {
             apellido = 'Lopez';
             telefono = '+52 656 555 7890';
             fotoUrl = 'https://i.pravatar.cc/150?img=12';
+            backgroundImg = 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&q=80&w=600';
             bio = 'Especialista en paseos y entrenamiento básico. Disponible todos los días.';
           } else if (email == 'cliente1@dogclub.com') {
             rol = 'cliente';
@@ -191,6 +195,7 @@ class AuthProvider extends ChangeNotifier {
             direccion: direccion,
             rol: UserRole.fromString(rol),
             fotoUrl: fotoUrl,
+            backgroundImg: backgroundImg,
             bio: bio,
             fechaRegistro: DateTime.now(),
             activo: true,

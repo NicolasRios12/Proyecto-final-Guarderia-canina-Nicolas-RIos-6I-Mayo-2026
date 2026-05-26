@@ -22,6 +22,7 @@ class _CaregiverProfileScreenState extends State<CaregiverProfileScreen> {
   late TextEditingController _apellidoCtrl;
   late TextEditingController _telefonoCtrl;
   late TextEditingController _direccionCtrl;
+  late TextEditingController _backgroundImgCtrl;
   late TextEditingController _bioCtrl;
   bool _isLoading = false;
 
@@ -33,6 +34,7 @@ class _CaregiverProfileScreenState extends State<CaregiverProfileScreen> {
     _apellidoCtrl = TextEditingController(text: user.apellido);
     _telefonoCtrl = TextEditingController(text: user.telefono);
     _direccionCtrl = TextEditingController(text: user.direccion);
+    _backgroundImgCtrl = TextEditingController(text: user.backgroundImg);
     _bioCtrl = TextEditingController(text: user.bio);
   }
 
@@ -42,6 +44,7 @@ class _CaregiverProfileScreenState extends State<CaregiverProfileScreen> {
     _apellidoCtrl.dispose();
     _telefonoCtrl.dispose();
     _direccionCtrl.dispose();
+    _backgroundImgCtrl.dispose();
     _bioCtrl.dispose();
     super.dispose();
   }
@@ -57,6 +60,7 @@ class _CaregiverProfileScreenState extends State<CaregiverProfileScreen> {
         apellido: _apellidoCtrl.text.trim(),
         telefono: _telefonoCtrl.text.trim(),
         direccion: _direccionCtrl.text.trim(),
+        backgroundImg: _backgroundImgCtrl.text.trim(),
         bio: _bioCtrl.text.trim(),
       );
 
@@ -152,77 +156,160 @@ class _CaregiverProfileScreenState extends State<CaregiverProfileScreen> {
         foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
         child: Form(
           key: _formKey,
           child: Column(
             children: [
-              GestureDetector(
-                onTap: _cambiarFoto,
-                child: Stack(
-                  children: [
-                    CircleAvatar(
-                      radius: 50,
-                      backgroundImage: user.fotoUrl.isNotEmpty
-                          ? NetworkImage(user.fotoUrl) : null,
-                      backgroundColor: AppColors.lightBlue,
-                      child: user.fotoUrl.isEmpty
-                          ? const Icon(Icons.camera_alt, size: 32, color: AppColors.primary)
+              // Vista previa de cabecera con Portada y Foto de perfil
+              Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment.center,
+                children: [
+                  // Imagen de portada
+                  Container(
+                    height: 160,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: AppColors.lightBlue,
+                      image: user.backgroundImg.isNotEmpty
+                          ? DecorationImage(
+                              image: NetworkImage(user.backgroundImg),
+                              fit: BoxFit.cover,
+                            )
                           : null,
                     ),
-                    Positioned(
-                      bottom: 0, right: 0,
-                      child: CircleAvatar(
-                        radius: 14, backgroundColor: AppColors.primary,
-                        child: const Icon(Icons.camera_alt, size: 14, color: Colors.white),
+                    child: user.backgroundImg.isEmpty
+                        ? Container(
+                            decoration: const BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [AppColors.primary, AppColors.secondary],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                            ),
+                            child: const Center(
+                              child: Opacity(
+                                opacity: 0.15,
+                                child: Icon(Icons.pets, size: 80, color: Colors.white),
+                              ),
+                            ),
+                          )
+                        : null,
+                  ),
+                  // Etiqueta indicadora
+                  Positioned(
+                    top: 12,
+                    right: 12,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Row(
+                        children: [
+                          Icon(Icons.image, size: 14, color: Colors.white),
+                          SizedBox(width: 4),
+                          Text(
+                            'Portada de fondo',
+                            style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       ),
                     ),
+                  ),
+                  // Foto de perfil superpuesta
+                  Positioned(
+                    bottom: -40,
+                    child: GestureDetector(
+                      onTap: _cambiarFoto,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 4),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.15),
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
+                            )
+                          ],
+                        ),
+                        child: CircleAvatar(
+                          radius: 45,
+                          backgroundImage: user.fotoUrl.isNotEmpty
+                              ? NetworkImage(user.fotoUrl)
+                              : null,
+                          backgroundColor: AppColors.lightBlue,
+                          child: user.fotoUrl.isEmpty
+                              ? const Icon(Icons.camera_alt, size: 30, color: AppColors.primary)
+                              : null,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 56), // Espacio para el avatar superpuesto
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: _nombreCtrl,
+                      textCapitalization: TextCapitalization.words,
+                      validator: (v) => Validators.required(v, 'Nombre'),
+                      decoration: const InputDecoration(labelText: 'Nombre', prefixIcon: Icon(Icons.person_outline)),
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _apellidoCtrl,
+                      textCapitalization: TextCapitalization.words,
+                      validator: (v) => Validators.required(v, 'Apellido'),
+                      decoration: const InputDecoration(labelText: 'Apellido', prefixIcon: Icon(Icons.person_outline)),
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _telefonoCtrl,
+                      keyboardType: TextInputType.phone,
+                      decoration: const InputDecoration(labelText: 'Teléfono', prefixIcon: Icon(Icons.phone_outlined)),
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _direccionCtrl,
+                      decoration: const InputDecoration(labelText: 'Dirección', prefixIcon: Icon(Icons.location_on_outlined)),
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _backgroundImgCtrl,
+                      keyboardType: TextInputType.url,
+                      decoration: const InputDecoration(
+                        labelText: 'URL de Imagen de Fondo (Portada)',
+                        hintText: 'https://ejemplo.com/mi-portada.jpg',
+                        prefixIcon: Icon(Icons.image_outlined),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _bioCtrl,
+                      maxLines: 4,
+                      decoration: const InputDecoration(
+                        labelText: 'Biografía / Descripción',
+                        hintText: 'Cuéntale a los clientes sobre ti y tu experiencia',
+                        prefixIcon: Icon(Icons.info_outline),
+                        alignLabelWithHint: true,
+                      ),
+                    ),
+                    const SizedBox(height: 32),
+                    PrimaryButton(
+                      label: 'Guardar Cambios',
+                      isLoading: _isLoading,
+                      onPressed: _isLoading ? null : _guardarPerfil,
+                    ),
+                    const SizedBox(height: 24),
                   ],
                 ),
               ),
-              const SizedBox(height: 24),
-              TextFormField(
-                controller: _nombreCtrl,
-                textCapitalization: TextCapitalization.words,
-                validator: (v) => Validators.required(v, 'Nombre'),
-                decoration: const InputDecoration(labelText: 'Nombre', prefixIcon: Icon(Icons.person_outline)),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _apellidoCtrl,
-                textCapitalization: TextCapitalization.words,
-                validator: (v) => Validators.required(v, 'Apellido'),
-                decoration: const InputDecoration(labelText: 'Apellido', prefixIcon: Icon(Icons.person_outline)),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _telefonoCtrl,
-                keyboardType: TextInputType.phone,
-                decoration: const InputDecoration(labelText: 'Teléfono', prefixIcon: Icon(Icons.phone_outlined)),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _direccionCtrl,
-                decoration: const InputDecoration(labelText: 'Dirección', prefixIcon: Icon(Icons.location_on_outlined)),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _bioCtrl,
-                maxLines: 4,
-                decoration: const InputDecoration(
-                  labelText: 'Biografía / Descripción',
-                  hintText: 'Cuéntale a los clientes sobre ti y tu experiencia',
-                  prefixIcon: Icon(Icons.info_outline),
-                  alignLabelWithHint: true,
-                ),
-              ),
-              const SizedBox(height: 32),
-              PrimaryButton(
-                label: 'Guardar Cambios',
-                isLoading: _isLoading,
-                onPressed: _isLoading ? null : _guardarPerfil,
-              ),
-              const SizedBox(height: 24),
             ],
           ),
         ),

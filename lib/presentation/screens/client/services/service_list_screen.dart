@@ -81,6 +81,7 @@ class ServiceListScreen extends StatelessWidget {
                       direccion: '',
                       rol: UserRole.cuidador,
                       fotoUrl: mock['foto_url'] as String,
+                      backgroundImg: '',
                       bio: '',
                       fechaRegistro: DateTime.now(),
                       activo: true,
